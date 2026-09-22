@@ -124,7 +124,7 @@ mark.kw{padding:0 .12em;border-radius:.2em;font-weight:600}
 .bar-row{display:flex;align-items:center;gap:.6rem;margin:.45rem 0}
 .bar-label{width:4rem;text-align:right;font-weight:600}
 .bar-track{flex:1;background:#f0eee8;border-radius:.4rem;height:1.5rem;overflow:hidden}
-.bar-fill{height:100%;border-radius:.4rem}
+.bar-fill{display:block;height:100%;border-radius:.4rem}
 .bf1{background:var(--k1)}.bf2{background:var(--k2)}.bf3{background:var(--k3)}.bf4{background:var(--k4)}
 .bar-num{width:3rem;font-variant-numeric:tabular-nums;font-weight:600}
 .tag{display:inline-block;padding:.05rem .5rem;border-radius:.3rem;font-weight:600;font-size:.85rem}
@@ -153,7 +153,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 
 JS = """
 (function(){
-  var rows = Array.prototype.slice.call(document.querySelectorAll('#kwic-table tbody tr'));
+  var rows = Array.prototype.slice
+    .call(document.querySelectorAll('#kwic-table tbody tr'))
+    .filter(function(r){ return r.hasAttribute('data-t'); });
   var q = document.getElementById('kwic-search');
   var btns = Array.prototype.slice.call(document.querySelectorAll('.tf'));
   var term = 'all';
@@ -298,8 +300,10 @@ def build_html(paras, hits, counter, rendered, quote_pno, check):
 </div>
 <p class="hint">顯示 <strong id="kwic-visible">{total_hits}</strong> / {total_hits} 條。點「段落」數字回到段落，點關鍵詞跳至全文高亮位置。前後 20 字為機械截取，語境功能（定義／品評／比喻）仍須人工閱讀判斷。</p>
 <table id="kwic-table">
-<tr><th>#</th><th>稱謂</th><th>段落</th><th>段內位置</th><th>前文</th><th>關鍵詞</th><th>後文</th></tr>
+<thead><tr><th>#</th><th>稱謂</th><th>段落</th><th>段內位置</th><th>前文</th><th>關鍵詞</th><th>後文</th></tr></thead>
+<tbody>
 {''.join(kwic_rows)}
+</tbody>
 </table>
 </section>
 """
